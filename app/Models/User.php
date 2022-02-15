@@ -48,8 +48,15 @@ class User extends Authenticatable
     public function getMainAddress()
     {
         return $this->addresses()->where('main', 1)->first();
+        
     }
-    public function roles()
+    public function isAdmin ()
+    {
+        
+        return $this->roles->pluck('name')->contains('Admin');//не работает env('ADMIN_ROLE')
+       // return $this->roles->pluck('name')->contains(env('ADMIN_ROLE'));
+    }
+    public function roles ()
     {
         return $this->belongsToMany(Role::class)->withTimestamps();
     }

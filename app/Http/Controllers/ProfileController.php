@@ -10,11 +10,14 @@ use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
-    public function profile ($id)
+    public function profile (User $user)
     {
-    
-        $user = User::findOrFail($id);
-       return view('profile', compact('user')) ; 
+        if (!Auth::user()) 
+        return redirect()->route('home');
+    if (Auth::user()->isAdmin() || $user->id == Auth::user()->id)
+        return view('profile', compact('user'));
+
+    return redirect()->route('home');  
     }
     public function save (Request $request)
     {
@@ -36,9 +39,10 @@ class ProfileController extends Controller
           'current_password' => 'current_password|required_with:password|nullable',
           'password' => 'confirmed|min:6|nullable'
         ]);
-        $user->password = Hash::make($input['password']);
-        $user->save();
-        
+        if ($input['password']) {
+            $user->password = Hash::make($input['password']);
+            $user->save();
+        }
         Address::where('user_id', $user->id)->update([
             'main' => 0
         ]);

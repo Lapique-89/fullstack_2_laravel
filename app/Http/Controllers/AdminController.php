@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\ExportCategories;
-use App\Jobs\ImportCategories;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
+use App\Jobs\ExportCategories;
+use App\Jobs\ImportCategories;
+
 
 class AdminController extends Controller
 {
@@ -56,16 +58,28 @@ class AdminController extends Controller
        session()->flash('startExportCategories');
        return back();
     }
+   
+
     public function addRole ()
     {
-       dd('!');
-      request()->validate([
-         'name' => 'required|min:3', //поле обязательное
-      ]);  
-       Role::create([
-            'name' => request('name'),
-       ]); 
-      
-       return back();
+        request()->validate([
+            'name' => 'required|min:3',
+        ]);
+
+        Role::create([
+            'name' => request('name')
+        ]);
+        return back();
+    }
+    public function addRoleToUser ()
+    {
+        request()->validate([
+            'user_id' => 'required',
+            'role_id' => 'required',
+        ]);
+
+        $user = User::find(request('user_id'));
+        $user->roles()->attach(Role::find(request('role_id')));
+        return back();
     }
 }
