@@ -13,11 +13,11 @@ class ProfileController extends Controller
     public function profile (User $user)
     {
         if (!Auth::user()) 
-        return redirect()->route('home');
-    if (Auth::user()->isAdmin() || $user->id == Auth::user()->id)
-        return view('profile', compact('user'));
+            return redirect()->route('home');
+        if (Auth::user()->isAdmin() || $user->id == Auth::user()->id)
+            return view('profile', compact('user'));
 
-    return redirect()->route('home');  
+        return redirect()->route('home');  
     }
     public function save (Request $request)
     {
@@ -32,12 +32,11 @@ class ProfileController extends Controller
        $user = User::find($userId);
 
         request()->validate([
-            'name' => 'required', //поле обязательное
-            
+            'name' => 'required', //поле обязательное            
             'email' => "email|required|unique:users,email,{$user->id}",
           //  'picture' => 'mimetypes:images/*'
-          'current_password' => 'current_password|required_with:password|nullable',
-          'password' => 'confirmed|min:6|nullable'
+            'current_password' => 'current_password|required_with:password|nullable',
+            'password' => 'confirmed|min:6|nullable'
         ]);
         if ($input['password']) {
             $user->password = Hash::make($input['password']);

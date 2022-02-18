@@ -15,7 +15,7 @@
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="{{ asset('js/app.js') }}" defer></script>
-    <script src="{{ asset('js/test.js') }}" defer></script>
+    <!--<script src="{{ asset('js/test.js') }}" defer></script> -->
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -27,7 +27,8 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+    
+        <nav class="navbar navbar-expand-md fixed-top  bg-light navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ route( 'home') }}">
                     {{ config('app.name', 'Laravel') }}
@@ -95,8 +96,12 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main style="padding-top: 43px !important;">
             <div class="container">
+                <div class="mb-4">
+                 <example-component></example-component> 
+               
+                </div>
                 @yield('content')
             </div>
            

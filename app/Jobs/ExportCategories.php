@@ -31,7 +31,7 @@ public $tries = 2;
      */
     public function handle()
     {
-        $c = 10 / 0;
+      //  $c = 10 / 0;
         $categories = Category::get()->toArray();
         $file = fopen('exportCategories.csv', 'w');
         $columns = [

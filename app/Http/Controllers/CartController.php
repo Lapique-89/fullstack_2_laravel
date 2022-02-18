@@ -89,7 +89,9 @@ class CartController extends Controller
 
                 Auth::loginUsingId($user->id);
             }
-    
+    else{
+        $password = '';
+    }
             $address = $user->getMainAddress();
     
             $cart = session('cart');

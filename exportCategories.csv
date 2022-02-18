@@ -1,0 +1,8 @@
+id;name;description;picture;created_at;update_at
+5;Видеокарты;sadfasfsdf;categories/no_picture.png;2022-01-27T16:41:11.000000Z;2022-01-27T16:41:11.000000Z
+6;Процессоры;"Intel лучше!";categories/no_picture.png;2022-01-27T16:41:11.000000Z;2022-02-04T16:14:31.000000Z
+10;"Жесткие диски ";"HDD, SDD";categories/no_picture.png;2022-01-29T12:16:23.000000Z;2022-01-29T12:16:23.000000Z
+11;"Оперативная память";"DDR3, DDR4";categories/no_picture.png;2022-01-29T12:16:23.000000Z;2022-01-29T12:16:23.000000Z
+12;Корпуса;"Aerocool, Deepcool, Zotac";categories/no_picture.png;2022-01-29T12:16:23.000000Z;2022-01-29T12:16:23.000000Z
+13;"Принтер ";"Лазерный, струйный матричный";categories/no_picture.png;2022-02-03T16:35:16.000000Z;2022-02-03T16:35:16.000000Z
+14;Сканер;"ручной, стационарный";categories/no_picture.png;2022-02-03T16:35:16.000000Z;2022-02-03T16:35:16.000000Z

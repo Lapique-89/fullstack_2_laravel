@@ -54,7 +54,7 @@ class User extends Authenticatable
     {
         
         return $this->roles->pluck('name')->contains('Admin');//не работает env('ADMIN_ROLE')
-       // return $this->roles->pluck('name')->contains(env('ADMIN_ROLE'));
+     //   return $this->roles->pluck('name')->contains(env('ADMIN_ROLE'));
     }
     public function roles ()
     {

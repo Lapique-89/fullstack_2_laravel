@@ -2,6 +2,7 @@
 
 use App\Models\Category;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
@@ -25,6 +26,7 @@ Artisan::command('orderTest', function () {
     });
     
 });
+
 /*Artisan::command('importCategoriesFromFile', function () {
     
     $file = fopen('categories.csv', 'r');
@@ -47,6 +49,46 @@ Artisan::command('orderTest', function () {
 
     Category::insert($insert);
 });*/
+Artisan::command('importProductsFromFile', function () {
+    
+    $file = fopen('products.csv', 'r');
+    $i = 0;
+    $insert = [];
+    while ($row = fgetcsv($file, 1000, ';')) {
+        if ($i++ == 0) {
+            $bom = pack('H*','EFBBBF');
+            $row = preg_replace("/^$bom/", '', $row);
+            $columns = $row;
+            continue;
+        }
+
+        $data = array_combine($columns, $row);
+        $data['created_at'] = date('Y-m-d H:i:s');
+        $data['updated_at'] = date('Y-m-d H:i:s');       
+        $insert[] = $data;                
+    }
+    $insertBase = [];
+    $error = [];
+    foreach ($insert as $ins)
+    {        
+        $category = Category::where('name',$ins['category'])->first(); 
+        if ($category == null)
+            {
+                array_push($error, $ins);
+            }
+            else {
+                $ins['category_id'] = $category->id; 
+                $ins['price']= (int)$ins['price'];
+                unset($ins['category']);
+        array_push($insertBase, $ins); 
+            }                
+        
+        
+    }
+  //  dd($insertBase);
+    Product::insert($insertBase);
+});
+
 Artisan::command('queryBuilder', function () {
 $data = DB::table('categories as c')
         ->select(
@@ -168,7 +210,120 @@ Artisan::command('parseEkatalog', function () {
     fclose($file);
 });
 
+Artisan::command('parseEkatalog1', function () {
 
+  //  $url = 'https://www.e-katalog.ru/list/186/intel/';
+  //  $url = 'https://www.e-katalog.ru/list/190/';
+  $url = 'https://www.e-katalog.ru/list/188/';
+    $data = file_get_contents($url);
+
+    $dom = new DomDocument();
+    @$dom->loadHTML($data);
+
+    $xpath = new DomXPath($dom);
+    $totalProductsString = $xpath->query("//span[@class='t-g-q']")[0]->nodeValue ?? false;
+    
+    preg_match_all('/\d+/', $totalProductsString, $matches);
+    $totalProducts = (int) $matches[0][0];
+    
+    $divs = $xpath->query("//div[@class='model-short-div list-item--goods   ']");
+
+    $productsOnOnePage = $divs->length;
+   // dd($productsOnOnePage);
+    $pages = ceil($totalProducts / $productsOnOnePage);
+
+    $products = [];
+    foreach ($divs as $div) {
+        $a = $xpath->query("descendant::a[@class='model-short-title no-u no-u']", $div);    
+        $name = $a[0]->nodeValue;
+
+        $price = 0;
+        $ranges = $xpath->query("descendant::div[@class='model-price-range']", $div);
+
+        if ($ranges->length == 1) {
+            foreach ($ranges[0]->childNodes as $child) {
+                if ($child->nodeName == 'a') {
+                    $price = $child->childNodes->item(0)->nodeValue;
+                }
+            }
+        }
+        
+    
+        $description = $xpath->query("descendant::div[@class='m-s-f3']", $div);
+        if ($description->length == 1) {           
+            $desc = $description[0]->nodeValue;       
+        }
+        elseif ($description->length > 1) { 
+            $descript='';
+            foreach ($description as $desc) 
+            if ($descript=='')   {
+                $descript = $desc->nodeValue;
+            }       
+            else {
+                $descript = $descript . '/' . $desc->nodeValue;
+            }
+                   
+        }
+      
+        
+        $products[] = [
+            'name' => $name,
+            'description' => trim($descript,'"'),
+            'price' => $price,
+            
+           // 'category' => 'Процессор'
+           // 'category' => 'Жесткие диски'
+           'category' => 'Оперативная память'
+
+        ];
+    }
+
+   /* for ($i = 1; $i < $pages; $i++) {
+        $nextUrl = "$url&page_=$i";
+
+        $data = file_get_contents($nextUrl);
+
+        $dom = new DomDocument();
+        @$dom->loadHTML($data);
+    
+        $xpath = new DomXPath($dom);
+        $divs = $xpath->query("//div[@class='model-short-div list-item--goods   ']");
+
+        foreach ($divs as $div) {
+            $a = $xpath->query("descendant::a[@class='model-short-title no-u']", $div);
+            $name = $a[0]->nodeValue;
+    
+            $price = 0;
+            $ranges = $xpath->query("descendant::div[@class='model-price-range']", $div);
+    
+            if ($ranges->length == 1) {
+                foreach ($ranges[0]->childNodes as $child) {
+                    if ($child->nodeName == 'a') {
+                        $price = $child->nodeValue;
+                    }
+                }
+            }
+    
+            $ranges = $xpath->query("descendant::div[@class='pr31 ib']", $div);
+            if ($ranges->length == 1) {
+                $price = $ranges[0]->nodeValue;
+            }
+            $products[] = [
+                'name' => $name,
+                'price' => $price,
+                'category' => 'Процессор'
+            ];
+        }
+    }
+*/
+   // $file = fopen('processor.csv', 'w');
+  //  $file = fopen('disks.csv', 'w');
+  $file = fopen('operativ.csv', 'w');
+    foreach ($products as $product) {
+        fputcsv($file, $product, ';');
+    }
+    fclose($file);
+});
 Artisan::command('massCategoriesInsert', function () {
 
     $categories = [
