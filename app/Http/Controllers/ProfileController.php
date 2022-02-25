@@ -28,8 +28,9 @@ class ProfileController extends Controller
        $picture = $input['picture'] ?? null;
        $newAddress = $input['new_address'];
        $userId = $input['userId'];
-
-       $user = User::find($userId);
+       $isMain = $input['is_Main'] ?? null;
+//dump($input);
+        $user = User::find($userId);
 
         request()->validate([
             'name' => 'required', //поле обязательное            
@@ -38,6 +39,7 @@ class ProfileController extends Controller
             'current_password' => 'current_password|required_with:password|nullable',
             'password' => 'confirmed|min:6|nullable'
         ]);
+
         if ($input['password']) {
             $user->password = Hash::make($input['password']);
             $user->save();
@@ -50,6 +52,7 @@ class ProfileController extends Controller
         ]);
 
         if ($newAddress) {
+            if ($isMain) {
             Address::where('user_id', $user->id)->update([
                 'main' => 0
             ]);
@@ -59,6 +62,14 @@ class ProfileController extends Controller
                 'address' => $newAddress,
                 'main' => 1
             ]);
+            }
+            else {
+                Address::create([
+                    'user_id' => $user ->id,
+                    'address' => $newAddress,
+                    'main' => 0
+                ]); 
+            }
         }
         if ($picture) {
             
@@ -72,6 +83,6 @@ class ProfileController extends Controller
        $user->save();
 
        session()->flash('profileSaved');//показывает ключ один раз и удаляется
-       return back();
+       return back(); 
     }
 }

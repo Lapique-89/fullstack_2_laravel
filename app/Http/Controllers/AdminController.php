@@ -14,6 +14,7 @@ use App\Jobs\ImportProducts;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -26,16 +27,15 @@ class AdminController extends Controller
        $users = User::get();
      //  dd($users);//останавливает код и отображает коллекцию
       $roles = Role::get();
-     $data = [
+      $data = [
           'title' => 'Список пользователей',
           'users' => $users,
           'roles' => $roles,
-          /*'number' => 10,
-          'numbers' => [1, 3, 5, 7],
-          'cities' => []*/
+          
        ];
        return view('admin.users', $data); 
     }
+
     //вывод списка продуктов
     public function products ()
     {
@@ -63,6 +63,7 @@ class AdminController extends Controller
       ];
       return view('admin.products', $data);        
     }
+
     //вывод списка категорий
     public function categories ()
     {
@@ -75,6 +76,7 @@ class AdminController extends Controller
       }
        return view('admin.categories', compact('categories'));  
     }
+
     public function enterAsUser ($id)
     {
        Auth::loginUsingId($id);
@@ -87,21 +89,36 @@ class AdminController extends Controller
        session()->flash('startExportCategories');
        return back();
     }
-    public function importCategories ()
+    public function importCategories (Request $request)
     {
-       ImportCategories::dispatch(); 
-       session()->flash('startImportCategories');
-       return back();
+      $request->validate([         
+         'fileImport' => 'required|file|mimes:csv,txt', 
+      ]);     
+
+      $file=$request->file('fileImport');
+      $filename = $file->getClientOriginalName();    
+      $fileall=$file->storeAs('public/categories', $filename); 
+      $tpm_file = $_SERVER['DOCUMENT_ROOT'] . '\\storage\categories\\'.$filename;
+      $this->dispatch(new ImportCategories($tpm_file));  
+      session()->flash('startImportCategories');
+      return back();
     }
     public function exportProducts()
     {
        ExportProducts::dispatch();  
        session()->flash('startExportProducts');
-       return back();
+       return back(); 
     }
-    public function importProducts ()
+    public function importProducts (Request $request)
     {
-       ImportProducts::dispatch(); 
+      $request->validate([         
+         'fileImport' => 'required|file|mimes:csv,txt', 
+      ]);
+      $file=$request->file('fileImport');
+      $filename = $file->getClientOriginalName();    
+      $fileall=$file->storeAs('public/products', $filename); 
+      $tpm_file = $_SERVER['DOCUMENT_ROOT'] . '\\storage\products\\'.$filename;
+      $this->dispatch(new ImportProducts($tpm_file));  
        session()->flash('startImportProducts');
        return back();
     }
@@ -111,7 +128,7 @@ class AdminController extends Controller
       request()->validate([
          'name' => 'required|min:3',
          'description' => 'required|min:3',         
-         'picture' => 'mimes:jpeg,jpg,png,gif|required|max:10000',         
+       //  'picture' => 'mimes:jpeg,jpg,png,gif|required|max:10000',         
      ]);
   
      $picture = request('picture') ?? null;

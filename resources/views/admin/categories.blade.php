@@ -33,7 +33,7 @@
 	background: #F7F7F7;
 } */
 .scroll-table-body {
-	height: 320px;
+	height: 315px;
 	overflow-x: auto;
 	margin-top: 0px;
 	margin-bottom: 20px;
@@ -100,18 +100,15 @@
            Список категорий
         </h1>
     </div>
-    <div class="col-2 ">
+   <!--  <div class="col-2 ">
         <form method="post"  action="{{ route('exportCategories')}}">
         @csrf
         <button type="submit" class="btn btn-link pb-0 btn-a">Выгрузить категории</button>
         </form>
-    </div>
-    <div class="col-2 ">
-        <form method="post" action="{{ route('importCategories')}}">
-        @csrf
-        <button type="submit" class="btn btn-link pb-0 btn-a">Загрузить категории</button>
-        </form>
-    </div>
+    </div> -->
+   <!--  <div class="col-2 ">
+       
+    </div> -->
 </div>
     <div class="scroll-table">
     <table class="table table-bordered">
@@ -164,30 +161,50 @@
        Категория успешно добавлена!     
     </div>
     @endif 
-
-<form method="post" action="{{route('addCategory')}}" class="mb-4" enctype="multipart/form-data">
-        <h3>Добавить новую категорию</h3>
+    <h3>Импорт/экспорт категорий</h3>
+    <div class="row pb-2 ">
+    <div class="col-2 ">
+        <form method="post"  action="{{ route('exportCategories')}}">
         @csrf
-        
-        <div class="mb-3">
-            <label class="form-label">Изображение</label>
-            <image class="user-picture mb-2" src="">
-            <input type="file" name="picture" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Наименование</label>
-            <input class="form-control mb-2" name='name'>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Описание</label>
-            <input class="form-control mb-2" name='description'>
-        </div>
-                          
-        <button class="btn btn-success" type="submit">Сохранить</button>
-</form>
+        <button type="submit" class="btn btn-link pb-0 ">Выгрузить категории</button>
+        </form>
+    </div>
+    <div class="col-6 ">
+       <form method="post" action="{{ route('importCategories')}}" class="mb-4" enctype="multipart/form-data">
+        @csrf
+        <button type="submit" class="btn btn-link pb-0 ">Загрузить категории</button>
+        <div class="mb-3 ">                
+                <input type="file"  name="fileImport" class="form-control">
+            </div>
+        </form> 
+    </div> 
+    </div> 
 
-
-    
-
-
+    <div class="row">
+  <div class="col-sm-8">
+    <div class="card" >   
+      <div class="card-body">
+        <h3 class="card-title">Добавить новую категорию</h3>
+        <form method="post" action="{{route('addCategory')}}" class="mb-4" enctype="multipart/form-data">       
+            @csrf        
+            <div class="mb-3">
+                <label class="form-label">Изображение</label>
+                <image class="user-picture mb-2" src="">
+                <input type="file" name="picture" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Наименование</label>
+                <input class="form-control mb-2" name='name'>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Описание</label>
+                <input class="form-control mb-2" name='description'>
+            </div>
+                            
+            <button class="btn btn-success" type="submit">Сохранить</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  </div>
 @endsection

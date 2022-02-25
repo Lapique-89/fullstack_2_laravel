@@ -37,8 +37,9 @@ Route::prefix('cart')->group(function () {
     Route::post('/removeFromCart', [CartController::class, 'removeFromCart'])->name('removeFromCart');
     Route::post('/addToCart', [CartController::class, 'addToCart'])->name('addToCart');
     Route::post('/createOrder', [CartController::class, 'createOrder'])->name('createOrder');
+    Route::get('/orders', [CartController::class, 'orders'])->name('orders');
 });
-
+Route::post('/RepeatCart', [CartController::class, 'RepeatCart'])->name('RepeatCart');
 Route::get('/category/{category}', [HomeController::class, 'category'])->name('category');
 Route::get('/profile/{user}', [ProfileController::class, 'profile'])->name('profile');
 Route::post('/profile/save', [ProfileController::class, 'save'])->name('saveProfile');

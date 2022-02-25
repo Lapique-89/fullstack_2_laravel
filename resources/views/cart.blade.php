@@ -12,6 +12,18 @@
 @endsection
 
 @section('content')
+<div class="row">
+    <div class="col-12">
+@if (Auth::user()->hasOrder()) 
+ 
+        <form method="get" action="{{ route('orders')}}" class="mb-4">
+            @csrf
+            <button type="submit" class="btn btn-link pb-0 ">Заказы</button>
+            
+        </form> 
+   
+ @endif
+    </div> 
     <table class="table table-bordered">
         <thead>
             <tr>

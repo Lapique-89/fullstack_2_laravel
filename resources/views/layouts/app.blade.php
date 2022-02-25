@@ -99,7 +99,7 @@
         <main style="padding-top: 43px !important;">
             <div class="container">
                 <div class="mb-4">
-                 <example-component></example-component> 
+            <!-- <example-component></example-component>  -->    
                
                 </div>
                 @yield('content')

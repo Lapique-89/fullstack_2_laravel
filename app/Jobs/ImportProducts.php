@@ -14,15 +14,15 @@ use Illuminate\Queue\SerializesModels;
 class ImportProducts implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
+    private $filePath;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(string $filePath)
     {
-        //
+       $this->filePath = $filePath;
     }
 
     /**
@@ -33,10 +33,11 @@ class ImportProducts implements ShouldQueue
     public function handle()
     {
        
-        $file = fopen('products.csv', 'r');
+        $cont = fopen($this->filePath, 'r');     
+
         $i = 0;
         $insert = [];
-        while ($row = fgetcsv($file, 1000, ';')) {
+        while ($row = fgetcsv($cont, 1000, ';')) {
             if ($i++ == 0) {
                 $bom = pack('H*','EFBBBF');
                 $row = preg_replace("/^$bom/", '', $row);
@@ -62,12 +63,12 @@ class ImportProducts implements ShouldQueue
                     $ins['category_id'] = $category->id; 
                     $ins['price']= $ins['price'];
                     unset($ins['category']);
-            array_push($insertBase, $ins); 
+                    array_push($insertBase, $ins); 
                 }                
             
             
         }
-      //  dd($insertBase);
+      
         Product::insert($insertBase);
     }
 }

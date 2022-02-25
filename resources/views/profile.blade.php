@@ -79,6 +79,11 @@
             <label class="form-label">Новый адрес</label>
             <input name="new_address" class="form-control">
         </div>
+        <div class="mb-3">
+        <input id='is_Main' name='is_Main' type="checkbox">
+          
+            <label for="is_Main">Сделать основным</label> 
+            </div>
         <button type="submit" class="btn btn-primary">Сохранить</button>
     </form>
 @endsection

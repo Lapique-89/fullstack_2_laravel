@@ -60,4 +60,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class)->withTimestamps();
     }
+     public function hasOrder ()
+    {
+          $hasOrder = Order::where('user_id', $this->id)->count();
+        return $hasOrder; 
+     
+     }
 }

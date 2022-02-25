@@ -10,13 +10,35 @@
 </style>
 @endsection
 @section('content')
-
 @auth
-Вы вошли!
+<div class="row">
+    <div class="col-9">  
+      
+        Вы вошли!
+      
+    </div>
+    <!-- @if (Auth::user()->hasOrder())
+    <div class="col-3">
+        <form method="post" action="{{ route('RepeatCart')}}" class="mb-4">
+            @csrf
+            <button type="submit" class="btn btn-link pb-0 ">Повторить предыдущий заказ</button>
+            
+        </form> 
+    </div> 
+    @endif -->
+</div>
 @endauth
 
-<div class="container">
-    <div class="row">
+
+
+<!-- <div class="container"> -->
+    <categories-component 
+        :categories="{{$categories}}" 
+        page-title="Список категорий" 
+        route-category="{{route('category', '')}}"
+        test="test"
+    ></categories-component>
+    <!-- <div class="row">
         @foreach ($categories as $category)
         <div class="col-3">
             <div class="card mb-4" style="width: 18rem;">
@@ -32,10 +54,10 @@
                     </p>
                     <a href="{{ route('category', $category->id) }}" class="btn btn-primary">Перейти</a>
                 </div>
-            </div>
+            </div> 
         </div>
 
         @endforeach
-    </div>
-</div>
+    </div>-->
+<!-- </div> -->
 @endsection

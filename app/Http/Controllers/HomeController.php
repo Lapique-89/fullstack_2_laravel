@@ -33,4 +33,23 @@ class HomeController extends Controller
         $products = $category->products;
         return view('category', compact('products'));
     }
+    public function repeatOrder ()
+    {
+     
+  
+    /*  $picture = request('picture') ?? null;
+     if ($picture) {            
+         $ext = $picture->getClientOriginalExtension();//получаем расширение 
+         $filename = time() . rand(10000,99999) . '.' . $ext;
+         $picture->storeAs('public/products', $filename); //сохраняем файл в папке проекта
+         $picturebase = "products/$filename";
+      }
+
+        Category::create([
+            'name' => request('name'),
+            'description' => request('description'),
+            'picture' => $picturebase,
+        ]); */
+        
+    }
 }

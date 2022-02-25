@@ -63,6 +63,69 @@ class CartController extends Controller
         session()->put('cart', $cart);
         return back();
     }
+    public function orders () {
+        $user = Auth::user();       
+        $orders = Order::where('user_id', $user->id)->get(); 
+       /* $orders =  DB::table('orders as o')
+       ->select(
+        'o.id', 'o.user_id', 'o.address_id','.a.address', 'o.created_at'     
+        )
+        ->join('addresses as a', 'o.address_id', '=', 'a.id')
+        ->where('O.user_id', $user->id) 
+        ->get();  */
+
+        $addresses = Address::where('user_id', $user->id)->get(); 
+        //$products = DB::table('order_product as op')
+        $products = DB::table('products as p')
+        ->select(
+           'p.id', 'p.name', 'op.quantity', 'op.price', 'op.price', 'a.address'     
+       )
+       ->join('order_product as op', 'p.id', '=', 'op.product_id')
+        ->join('orders as o', 'op.order_id', '=', 'o.id') 
+        ->join('addresses as a', 'o.address_id', '=', 'a.id') 
+        ->get();  
+        
+
+        $data = [
+            'title' => 'Заказы',            
+            'orders' => $orders,
+            'products' => $products,  
+            'addresses' => $addresses,    
+         ];
+         return view('orders', $data); 
+    }
+    public function RepeatCart ()
+    {
+        $user = Auth::user();
+        $cart = session('cart') ?? [];
+
+      /*   $order = Order::where('user_id', $user->id)->latest()
+    ->first();   */
+  //  dd(request()->all());
+    $order = Order::where('id', request('id'))->first();
+   
+    $products = DB::table('order_product as op')
+      ->select(
+         'op.product_id', 'op.quantity'     
+     )
+      ->join('orders as o', 'op.order_id', '=', 'o.id')
+      ->where('op.order_id',$order->id)         
+      ->get();
+      
+      foreach($products as $product) {
+        $productId = $product->product_id;
+       
+
+        if (isset($cart[$productId])) {
+            $cart[$productId] = $cart[$productId]+$product->quantity;
+        } else {
+            $cart[$productId] = $product->quantity;
+        }
+
+        session()->put('cart', $cart);
+      }      
+        return redirect()->route('cart');  
+    }
     public function createOrder ()
     {
         request()->validate([
@@ -89,9 +152,9 @@ class CartController extends Controller
 
                 Auth::loginUsingId($user->id);
             }
-    else{
+     else{
         $password = '';
-    }
+    } 
             $address = $user->getMainAddress();
     
             $cart = session('cart');

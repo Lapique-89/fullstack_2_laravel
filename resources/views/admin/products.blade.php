@@ -93,25 +93,7 @@
 </style>
 @endsection
 @section('content')
-    <div class="row">
-        <div class="col-10 col-md-8">
-            <h1>
-                {{ $title }}
-            </h1>
-        </div>
-        <div class="col-2 ">
-            <form method="post" action="{{ route('exportProducts')}}" >
-                @csrf
-                <button type="submit" class="btn btn-link pb-0 btn-a" >Выгрузить продукты</button>
-            </form>    
-        </div>
-        <div class="col-2 ">
-            <form method="post" action="{{ route('importProducts')}}" class="mb-0 ms-auto">
-                @csrf
-                <button type="submit" class="btn btn-link pb-0 btn-a align-self-end" >Загрузить продукты</button>
-            </form>
-        </div>
-    </div>
+  
     <div class="scroll-table">
     <table class="table table-bordered">
         <thead class="table-light">
@@ -169,10 +151,35 @@
        Категория успешно добавлена!     
     </div>
     @endif 
-    
-
+    <h3>Импорт/экспорт категорий</h3>
+    <div class="row pb-2 ">
+    <div class="col-2 ">
+        <form method="post" class="mb-4" action="{{ route('exportProducts')}}" >
+                @csrf
+                <button type="submit" class="btn btn-link pb-0 btn-a" >Выгрузить продукты</button>
+        </form>   
+    </div>
+    <div class="col-6 ">
+   <!--  <form method="post" action="{{ route('importProducts')}}" class="mb-0 ms-auto">
+                @csrf
+                <button type="submit" class="btn btn-link pb-0 btn-a align-self-end" >Загрузить продукты</button>
+            </form> -->
+       <form method="post" action="{{ route('importProducts')}}" class="mb-4" enctype="multipart/form-data">
+        @csrf
+        <button type="submit" class="btn btn-link pb-0 btn-a">Загрузить продукты</button>
+        <div class="mb-3 ">                
+                <input type="file"  name="fileImport" class="form-control">
+            </div>
+        </form> 
+    </div> 
+    </div>  
+  <div class="row">
+  <div class="col-sm-8">
+    <div class="card" >   
+      <div class="card-body">
+        <h3 class="card-title">Добавить новый продукт</h3>
     <form method="post" action="{{route('addProduct')}}" class="mb-4" enctype="multipart/form-data">
-        <h3>Добавить новый продукт</h3>
+        
         @csrf
         <div class="mb-3">
             <select class="form-control mb-2" name='category_id'>
@@ -200,6 +207,10 @@
             <input class="form-control mb-2" name='price' type="number" min="1" step="any">        
         </div>                    
         <button class="btn btn-success" type="submit">Сохранить</button>
-</form>
+        </form>
+      </div>
+    </div>
+  </div>
+  </div>
     
 @endsection

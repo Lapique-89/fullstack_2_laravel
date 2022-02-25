@@ -9,19 +9,21 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 
 class ImportCategories implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
+    
+    private $filePath;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(string $filePath)
     {
-        //
+       $this->filePath = $filePath;
     }
 
     /**
@@ -31,11 +33,11 @@ class ImportCategories implements ShouldQueue
      */
     public function handle()
     {
-        $file = fopen('categories.csv', 'r');
+        $cont = fopen($this->filePath, 'r');     
 
         $i = 0;
         $insert = [];
-        while ($row = fgetcsv($file, 1000, ';')) {
+        while ($row = fgetcsv($cont, 1000, ';')) {
             if ($i++ == 0) {
                 $bom = pack('H*','EFBBBF');
                 $row = preg_replace("/^$bom/", '', $row);
@@ -47,8 +49,7 @@ class ImportCategories implements ShouldQueue
             $data['created_at'] = date('Y-m-d H:i:s');
             $data['updated_at'] = date('Y-m-d H:i:s');
             $insert[] = $data;        
-        }
-    
+        }    
         Category::insert($insert);
     }
 }

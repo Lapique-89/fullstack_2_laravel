@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Address;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
@@ -19,36 +20,52 @@ use Illuminate\Support\Facades\DB;
 | simple approach to interacting with each command's IO methods.
 |
 */
+
 Artisan::command('orderTest', function () {
-    $order = Order::first();  
-    $order->products->each(function ($product) {
-        dd($product->pivot->quantity);
-    });
+   /*  $order = Order::where('user_id', 3)->latest()
+    ->first();  
+
+   // dd($order->id);
+    $products = DB::table('order_product as op')
+      ->select(
+         'op.product_id', 'op.quantity'     
+     )
+      ->join('orders as o', 'op.order_id', '=', 'o.id')
+      ->where('op.order_id',$order->id)         
+      ->get();
+      dd($products); */
+  /*   $order->products->each(function ($product) {
+        dd($product->pivot->quantity); 
+    });*/
+    $hasOrder = Order::where('user_id', 1)->count();
+    dd($hasOrder);
     
 });
 
-/*Artisan::command('importCategoriesFromFile', function () {
+Artisan::command('importCategoriesFromFile', function () {
     
-    $file = fopen('categories.csv', 'r');
+ /*   $filename = $fileImport->getClientOriginalName();
+        $file = fopen($filename, 'r');
 
-    $i = 0;
-    $insert = [];
-    while ($row = fgetcsv($file, 1000, ';')) {
-        if ($i++ == 0) {
-            $bom = pack('H*','EFBBBF');
-            $row = preg_replace("/^$bom/", '', $row);
-            $columns = $row;
-            continue;
+        $i = 0;
+        $insert = [];
+        while ($row = fgetcsv($file, 1000, ';')) {
+            if ($i++ == 0) {
+                $bom = pack('H*','EFBBBF');
+                $row = preg_replace("/^$bom/", '', $row);
+                $columns = $row;
+                continue;
+            }
+    
+            $data = array_combine($columns, $row);
+            $data['created_at'] = date('Y-m-d H:i:s');
+            $data['updated_at'] = date('Y-m-d H:i:s');
+            $insert[] = $data;        
         }
-
-        $data = array_combine($columns, $row);
-        $data['created_at'] = date('Y-m-d H:i:s');
-        $data['updated_at'] = date('Y-m-d H:i:s');
-        $insert[] = $data;        
-    }
-
-    Category::insert($insert);
-});*/
+    
+        Category::insert($insert);
+    }*/
+});
 Artisan::command('importProductsFromFile', function () {
     
     $file = fopen('products.csv', 'r');
@@ -370,10 +387,23 @@ Artisan::command('createCategory', function () {
 
    
 });
- 
+Artisan::command('order', function () {
+$orders = Order::where('user_id', 3)->get(); 
+$addresses = Address::where('user_id', 3)->get();;
+foreach($orders as $order ) {
+ foreach($addresses as $address){
+    
+ if ($address->id == $order->address_id) {
+    dd($address->address);
+}  
+
+
+}
+}
+});
 Artisan::command('inspire', function () {
 
-    $user = User::find(2);
+    $user = User::find(3);
     $addresses = $user->addresses->filter(function ($address) {
         return $address->main;
     })->pluck('address');
