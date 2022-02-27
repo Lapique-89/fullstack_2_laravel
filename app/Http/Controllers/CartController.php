@@ -46,7 +46,8 @@ class CartController extends Controller
         }
 
         session()->put('cart', $cart);
-        return back();
+        return $cart[$productId] ?? 0;
+        //return back();
     }
 
     public function addToCart ()
@@ -61,7 +62,8 @@ class CartController extends Controller
         }
 
         session()->put('cart', $cart);
-        return back();
+        return $cart[$productId];
+        //return back();
     }
     public function orders () {
         $user = Auth::user();       
@@ -132,7 +134,7 @@ class CartController extends Controller
             'name' => 'required',
             'email' => 'required|email',
             'address' => 'required',
-            'register_confirmation' => 'accepted'
+            'register_confirmation' => 'accepted|sometimes'
         ]);
         DB::transaction(function () {
             $user = Auth::user();
@@ -180,7 +182,7 @@ class CartController extends Controller
         });        
 
         session()->forget('cart');
-        return back();
+        return true;
         
     }
 }

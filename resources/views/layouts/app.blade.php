@@ -23,6 +23,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    
     @yield('styles')
 </head>
 <body>
@@ -46,8 +47,8 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                            <a class="nav-link" href="{{ route('cart') }}">
-                                Корзина ({{ array_sum(session('cart') ?? []) }})
+                    <a class="nav-link" href="{{ route('cart') }}">
+                                Корзина <span id='cartProductsQuantity'>({{ array_sum(session('cart') ?? []) }})</span>
                             </a>
                         </li> 
                         <!-- Authentication Links -->

@@ -13,14 +13,23 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
     Route::get('/', "App\Http\Controllers\AdminController@admin")->name('admin');
     Route::get('/users', [AdminController::class, 'users'])->name('adminUsers');
-    Route::get('/products', [AdminController::class, 'products'])->name('adminProducts');
-    Route::get('/categories', [AdminController::class, 'categories'])->name('adminCategories');
+    
+
     Route::get('/enterAsUser/{id}', [AdminController::class, 'enterAsUser'])->name('enterAsUser');
 
+    Route::get('/categories', [AdminController::class, 'categories'])->name('adminCategories');
     Route::post('/exportCategories', [AdminController::class, 'exportCategories'])->name('exportCategories');
     Route::post('/importCategories', [AdminController::class, 'importCategories'])->name('importCategories');
     Route::post('/addCategory', [AdminController::class, 'addCategory'])->name('addCategory');
+    Route::post('/deleteCategory/{id}', [AdminController::class, 'deleteCategory'])->name('deleteCategory');
+     Route::get('/getCategory/{id}', [AdminController::class, 'getcategory'])->name('getCategory');
+    Route::post('/updateCategory', [AdminController::class, 'updateCategory'])->name('updateCategory'); 
 
+    Route::get('/products', [AdminController::class, 'products'])->name('adminProducts');
+    Route::get('/getProduct/{id}', [AdminController::class, 'getProduct'])->name('getProduct');
+    Route::post('/updateProduct', [AdminController::class, 'updateProduct'])->name('updateProduct'); 
+    Route::post('/deleteProduct/{id}', [AdminController::class, 'deleteProduct'])->name('deleteProduct');
+    
     Route::post('/exportProducts', [AdminController::class, 'exportProducts'])->name('exportProducts');
     Route::post('/importProducts', [AdminController::class, 'importProducts'])->name('importProducts');
     Route::post('/addProduct', [AdminController::class, 'addProduct'])->name('addProduct');
@@ -41,6 +50,7 @@ Route::prefix('cart')->group(function () {
 });
 Route::post('/RepeatCart', [CartController::class, 'RepeatCart'])->name('RepeatCart');
 Route::get('/category/{category}', [HomeController::class, 'category'])->name('category');
+Route::get('/category/{category}/getProducts', [HomeController::class, 'getProducts']);
 Route::get('/profile/{user}', [ProfileController::class, 'profile'])->name('profile');
 Route::post('/profile/save', [ProfileController::class, 'save'])->name('saveProfile');
 //Route::get('/home',[HomeController::class, 'index'])->name('home');

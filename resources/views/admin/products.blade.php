@@ -98,12 +98,14 @@
     <table class="table table-bordered">
         <thead class="table-light">
             <tr>
-                <th width="40">#</th>
-                <th width="110">Изображение</th>
-                <th width="20%">Категория</th>
-                <th width="20%">Наименование</th>
-                <th width="40%">Описание</th>                
+                <th width="4%">#</th>
+                <th width="10%">Изображение</th>
+                <th width="15%">Категория</th>
+                <th width="18%">Наименование</th>
+                <th width="29%">Описание</th>                
                 <th width="10%">Цена</th>
+                <th width="13%"></th>
+                <th width="10%"></th>
                 
             </tr>
         </thead>
@@ -113,13 +115,25 @@
         <tbody>
         @foreach ($products as $product)
                 <tr>
-                    <td width="40">{{$product->id_into_table}}</td>
-                    <td  width="110"class="pict"><image class="product-picture mb-0" src="{{asset('storage')}}/{{$product->picture}}"></td>
-                    <td width="20%"> {{$product->category}} </td>
-                    <td width="20%">{{ $product->name }}</td>
-                    <td width="40%">{{ $product->description }}</td>
+                    <td width="4%">{{$product->id_into_table}}</td>
+                    <td  width="10%"class="pict"><image class="product-picture mb-0" src="{{asset('storage')}}/{{$product->picture}}"></td>
+                    <td width="15%"> {{$product->category}} </td>
+                    <td width="18%">{{ $product->name }}</td>
+                    <td width="29%">{{ $product->description }}</td>
                     <td width="10%">{{ $product->price }}</td>
-                    
+                    <td class="text-center" width="13%">
+                        <a class="btn btn-outline-secondary"  href="{{ route('getProduct', $product->id) }}">
+                            Редактировать
+                        </a>
+                    </td>
+                    <td class="text-center" width="9.6%">
+                        <form method="post" action="{{ route('deleteProduct', $product->id) }}">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-secondary">
+                                Удалить
+                            </button>
+                        </form>
+                </td>
                 </tr>
             @endforeach
             </tbody>
@@ -148,7 +162,7 @@
     @endif
     @if (session('productCreate'))
     <div class="alert alert-success" role="alert">
-       Категория успешно добавлена!     
+       Продукт успешно добавлен!     
     </div>
     @endif 
     <h3>Импорт/экспорт категорий</h3>

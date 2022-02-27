@@ -12,7 +12,7 @@
                     <p class="card-text">
                         {{ category.description }}
                     </p>
-                    <a :href="`${routCategory}/${category.id}`" class="btn btn-primary">Перейти</a>
+                    <a :href="`${routeCategory}/${category.id}`" class="btn btn-primary">Перейти</a>
                     <button @click='buttonClicked' class="btn btn-link">Click</button>
                 </div>
             </div>
@@ -24,7 +24,7 @@
 <script>
 export default {
         props: [
-            'category' , 'routCategory'         
+            'category' , 'routeCategory'         
         ],
         data () { 
             return {
@@ -41,8 +41,8 @@ export default {
        
        
          created () {
-         
-            console.log( this.category, this.routCategory)
+         debugger
+            console.log( this.category, this.routeCategory)
         }
     }
 </script>

@@ -50,25 +50,7 @@ class ImportProducts implements ShouldQueue
             $data['updated_at'] = date('Y-m-d H:i:s');       
             $insert[] = $data;                
         }
-        $insertBase = [];
-        $error = [];
-        foreach ($insert as $ins)
-        {        
-            $category = Category::where('name',$ins['category'])->first(); 
-            if ($category == null)
-                {
-                    array_push($error, $ins);
-                }
-                else {
-                    $ins['category_id'] = $category->id; 
-                    $ins['price']= $ins['price'];
-                    unset($ins['category']);
-                    array_push($insertBase, $ins); 
-                }                
-            
-            
-        }
-      
-        Product::insert($insertBase);
+        
+        Product::upsert($insert,['id'],$columns);
     }
 }

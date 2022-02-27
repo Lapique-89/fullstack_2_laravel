@@ -50,6 +50,8 @@ class ImportCategories implements ShouldQueue
             $data['updated_at'] = date('Y-m-d H:i:s');
             $insert[] = $data;        
         }    
-        Category::insert($insert);
+        Category::upsert($insert,['id'],$columns);
+        
+        
     }
 }

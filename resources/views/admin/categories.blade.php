@@ -114,10 +114,12 @@
     <table class="table table-bordered">
         <thead class="table-light">
             <tr>
-                <th width="40">#</th>
-                <th width="110">Изображение</th>
-                <th width="30%">Имя</th>
-                <th width="60%">Описание</th>
+                <th width="3%">#</th>
+                <th width="9%">Изображение</th>
+                <th width="20%">Имя</th>
+                <th width="63%">Описание</th>
+                <th width="12%"></th>
+               
             </tr>
         </thead>
         </table>
@@ -126,11 +128,28 @@
         <tbody>
             @foreach ($categories as $category)
                 <tr>
-                    <td width="40">{{ $category->id_into_table }}</td>
-                    <td width="110" class="pict"><image class="product-picture mb-0" src="{{asset('storage')}}/{{$category->picture}}"></td>
+                    <td width="3%">{{ $category->id_into_table }}</td>
+                    <td width="9%" class="pict"><image class="product-picture mb-0" src="{{asset('storage')}}/{{$category->picture}}"></td>
                 
-                    <td width="30%">{{ $category->name }}</td>
-                    <td width="60%">{{ $category->description }}</td>                   
+                    <td width="20%">
+                        <a   href="{{ route('category', $category->id) }}">
+                        {{ $category->name }}
+                        </a>
+                    </td>
+                    <td width="63%">{{ $category->description }}</td>  
+                    <td class="text-center" width="12%">
+                        <a class="btn btn-outline-secondary"  href="{{ route('getCategory', $category->id) }}">
+                            Редактировать
+                        </a>
+                    </td>
+                    <!-- <td class="text-center" width="8.6%">
+                        <form method="post" action="{{ route('deleteCategory', $category->id) }}">
+                         @csrf
+                            <button type="submit" class="btn btn-outline-secondary">
+                            Удалить</i>
+                            </button>
+                        </form>
+                    </td>   -->               
                 </tr>
             @endforeach
             </tbody>
@@ -159,6 +178,11 @@
     @if (session('categoryCreated'))
     <div class="alert alert-success" role="alert">
        Категория успешно добавлена!     
+    </div>
+    @endif 
+    @if (session('updateCategorySuccess'))
+    <div class="alert alert-success" role="alert">
+       Категория успешно обновлена!     
     </div>
     @endif 
     <h3>Импорт/экспорт категорий</h3>

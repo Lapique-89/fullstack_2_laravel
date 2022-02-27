@@ -44,7 +44,7 @@ Artisan::command('orderTest', function () {
 
 Artisan::command('importCategoriesFromFile', function () {
     
- /*   $filename = $fileImport->getClientOriginalName();
+    /* 
         $file = fopen($filename, 'r');
 
         $i = 0;
@@ -64,7 +64,42 @@ Artisan::command('importCategoriesFromFile', function () {
         }
     
         Category::insert($insert);
-    }*/
+ */  
+$cont = fopen('categories.csv', 'r');     
+
+        $i = 0;
+        $insert = [];
+        while ($row = fgetcsv($cont, 1000, ';')) {
+            if ($i++ == 0) {
+                $bom = pack('H*','EFBBBF');
+                $row = preg_replace("/^$bom/", '', $row);
+                $columns = $row;
+                continue;
+            }
+    
+            $data = array_combine($columns, $row);
+            $data['created_at'] = date('Y-m-d H:i:s');
+            $data['updated_at'] = date('Y-m-d H:i:s');
+            $insert[] = $data;        
+        }    
+        Auth::loginUsingId(1);
+        foreach ($insert as $ins)
+        {        
+            $category = Category::find($ins['id']); 
+
+          //  dd($ins['name']);
+           if ($category == null)
+                {//вставляем запись
+                    Category::create([
+                        'name' => $ins['name'],
+                        'description' => $ins['description']                        
+                    ]);
+                }
+                else {//обновляем                    
+                    $category->description = $ins['description'];
+                    $category->save();                      
+                }      
+            }
 });
 Artisan::command('importProductsFromFile', function () {
     
@@ -413,3 +448,8 @@ Artisan::command('inspire', function () {
 
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
+Artisan::command('getCategory', function () {
+    $id=5;
+$category = Category::where('id', $id)->get();
+dd($category);
+});
