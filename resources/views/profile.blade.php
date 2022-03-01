@@ -18,7 +18,11 @@
 @endsection
 
 @section('content')
-@if ($errors->isNotEmpty())
+<profile-component 
+        :user="{{$user}}"    
+        :addresses="{{$addresses}}"    
+    ></profile-component>
+<!-- @if ($errors->isNotEmpty())
         <div class="alert alert-warning" role="alert">
             @foreach ($errors->all() as $error)
                 {{$error}}
@@ -85,5 +89,5 @@
             <label for="is_Main">Сделать основным</label> 
             </div>
         <button type="submit" class="btn btn-primary">Сохранить</button>
-    </form>
+    </form> -->
 @endsection

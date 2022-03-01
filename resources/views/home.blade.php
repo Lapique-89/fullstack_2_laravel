@@ -13,19 +13,10 @@
 @auth
 <div class="row">
     <div class="col-9">  
-      
         Вы вошли!
       
     </div>
-    <!-- @if (Auth::user()->hasOrder())
-    <div class="col-3">
-        <form method="post" action="{{ route('RepeatCart')}}" class="mb-4">
-            @csrf
-            <button type="submit" class="btn btn-link pb-0 ">Повторить предыдущий заказ</button>
-            
-        </form> 
-    </div> 
-    @endif -->
+    
 </div>
 @endauth
 

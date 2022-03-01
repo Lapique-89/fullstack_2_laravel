@@ -22,7 +22,7 @@ export default {
         }
     },
     mounted () {
-        debugger
+    
         axios.get(`/category/${this.category}/getProducts`)
             .then(response => {
                 this.products = response.data

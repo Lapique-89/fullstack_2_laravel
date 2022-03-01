@@ -137,7 +137,7 @@
                         </a>
                     </td>
                     <td width="63%">{{ $category->description }}</td>  
-                    <td class="text-center" width="12%">
+                    <td class="text-center" width="11.6%">
                         <a class="btn btn-outline-secondary"  href="{{ route('getCategory', $category->id) }}">
                             Редактировать
                         </a>

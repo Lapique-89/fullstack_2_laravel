@@ -53,6 +53,7 @@ Route::get('/category/{category}', [HomeController::class, 'category'])->name('c
 Route::get('/category/{category}/getProducts', [HomeController::class, 'getProducts']);
 Route::get('/profile/{user}', [ProfileController::class, 'profile'])->name('profile');
 Route::post('/profile/save', [ProfileController::class, 'save'])->name('saveProfile');
+Route::get('/profile/{user}/getAddress', [ProfileController::class, 'getAddress']);
 //Route::get('/home',[HomeController::class, 'index'])->name('home');
 
 Auth::routes();

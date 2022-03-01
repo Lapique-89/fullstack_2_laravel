@@ -14,28 +14,39 @@ class ProfileController extends Controller
     {
         if (!Auth::user()) 
             return redirect()->route('home');
-        if (Auth::user()->isAdmin() || $user->id == Auth::user()->id)
-            return view('profile', compact('user'));
+        if (Auth::user()->isAdmin() || $user->id == Auth::user()->id) 
+        {
+            $addresses = $user->addresses()->get();
+            
+            return view('profile', compact('user', 'addresses'));
+        }
+          //  return view('profile', compact('user'));
 
         return redirect()->route('home');  
+    }
+    public function getAddress (User $user)
+    {
+
+         $address = $user->addresses()->get();
+        return $address;  
     }
     public function save (Request $request)
     {
         //$name = request('name');//достать один параметр
        $input = request()->all(); 
-       $name = $input['name'];
+        $name = $input['name'];
        $email = $input['email'];
-       $picture = $input['picture'] ?? null;
+       $picture = $input['file'] ?? null;
        $newAddress = $input['new_address'];
        $userId = $input['userId'];
        $isMain = $input['is_Main'] ?? null;
-//dump($input);
-        $user = User::find($userId);
+
+  $user = User::find($userId);
 
         request()->validate([
             'name' => 'required', //поле обязательное            
             'email' => "email|required|unique:users,email,{$user->id}",
-          //  'picture' => 'mimetypes:images/*'
+            'picture' => 'mimetypes:images/*',
             'current_password' => 'current_password|required_with:password|nullable',
             'password' => 'confirmed|min:6|nullable'
         ]);
@@ -82,7 +93,13 @@ class ProfileController extends Controller
        $user->email = $email;
        $user->save();
 
-       session()->flash('profileSaved');//показывает ключ один раз и удаляется
-       return back(); 
+       session()->flash('profileSaved');//показывает ключ один раз и удаляется 
+       $addresses = $user->addresses()->get();
+       $result = [
+        'user' => $user,
+        'addresses' => $addresses,
+        
+    ];
+       return $result;
     }
 }

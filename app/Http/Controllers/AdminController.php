@@ -132,7 +132,7 @@ class AdminController extends Controller
       request()->validate([
          'name' => 'required|min:3',
          'description' => 'required|min:3',    
-         'picture' => 'mimes:jpeg,jpg,png,gif|required|max:10000',
+         'picture' => 'mimes:jpeg,jpg,png,gif|max:10000',
    
        //  'picture' => 'mimes:jpeg,jpg,png,gif|required|max:10000',         
      ]);
@@ -144,7 +144,7 @@ class AdminController extends Controller
          $picture->storeAs('public/products', $filename); //сохраняем файл в папке проекта
          $picturebase = "products/$filename";
       }
-
+    else $picturebase = "products/no_picture.png";
         Category::create([
             'name' => request('name'),
             'description' => request('description'),
@@ -172,7 +172,7 @@ class AdminController extends Controller
         request()->validate([
          'name' => 'required|min:3',
          'description' => 'required|min:3', 
-         'picture' => 'mimes:jpeg,jpg,png,gif|required|max:10000',
+         'picture' => 'mimes:jpeg,jpg,png,gif|max:10000',
 
         ]);
         if ($picture) {
@@ -185,7 +185,8 @@ class AdminController extends Controller
                 $picture->storeAs('public/categories', $fileName);
                 $category->picture = "categories/$fileName";
             } 
-        } 
+        }
+         
         
         if ($name) $category->name = $name;
         if ($description) $category->description = $description;
@@ -213,7 +214,7 @@ class AdminController extends Controller
             'name' => 'required|min:3',
             'description' => 'required|min:3',
             'price' => 'required',
-            'picture' => 'mimes:jpeg,jpg,png,gif|required|max:10000',
+            'picture' => 'mimes:jpeg,jpg,png,gif|max:10000',
             'category_id' => 'required'
         ]);
      
@@ -223,7 +224,8 @@ class AdminController extends Controller
             $filename = time() . rand(10000,99999) . '.' . $ext;
             $picture->storeAs('public/products', $filename); //сохраняем файл в папке проекта
             $picturebase = "products/$filename";
-         }
+         } 
+         else $picturebase="products/no_picture.png";
     
         Product::create([
             'name' => $name,

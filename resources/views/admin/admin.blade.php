@@ -23,16 +23,6 @@
   </div>
   <div class="col-sm-3">
     <div class="card">
-    <!-- <img src="..." class="card-img-top" alt="..."> -->
-      <div class="card-body">
-        <h5 class="card-title">Продукты</h5>
-        <p class="card-text">Данные продуктов</p>
-        <a  class="btn btn-primary" href="{{ route('adminProducts') }}">Перейти</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-3">
-    <div class="card">
    <!--  <img src="..." class="card-img-top" alt="..."> -->
       <div class="card-body">
         <h5 class="card-title">Категории</h5>
@@ -41,5 +31,16 @@
       </div>
     </div>
   </div>
+  <div class="col-sm-3">
+    <div class="card">
+    <!-- <img src="..." class="card-img-top" alt="..."> -->
+      <div class="card-body">
+        <h5 class="card-title">Продукты</h5>
+        <p class="card-text">Данные продуктов</p>
+        <a  class="btn btn-primary" href="{{ route('adminProducts') }}">Перейти</a>
+      </div>
+    </div>
+  </div>
+  
 </div>
 @endsection

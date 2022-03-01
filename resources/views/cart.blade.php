@@ -12,8 +12,7 @@
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-12">
+@auth     
     @if (Auth::user()->hasOrder()) 
  
         <form method="get" action="{{ route('orders')}}" class="mb-4">
@@ -21,12 +20,17 @@
             <button type="submit" class="btn btn-link pb-0 ">Заказы</button>            
         </form>    
     @endif
-    </div> 
-    </div> 
-    <cart-component 
+    @endauth 
+
+    
+    <cart-component
         :prods="{{$products}}"
+        @if ($user)
         :user="{{$user}}"
+        @endif
         address="{{$address}}"
-    ></cart-component>
+    >
+    </cart-component>
+
     
 @endsection
